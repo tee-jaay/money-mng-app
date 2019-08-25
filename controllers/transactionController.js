@@ -25,7 +25,7 @@ module.exports = {
                 }
                 // console.log(updatedUser.transactions)
                 updatedUser.transactions.unshift(trans._id)
-                User.findByIdAndUpdate(updatedUser._id, { $set: updatedUser }, { new: true })
+                User.findOneAndUpdate(updatedUser._id, { $set: updatedUser }, { new: true })
                     .then(result => {
                         res.status(201).json({
                             message: 'Transaction created successfully',
@@ -67,23 +67,23 @@ module.exports = {
     },
     updateTransaction(req, res) {
         let { transactionId } = req.params
-        User.findByIdAndUpdate(transactionId, { $set: req.body })
+        Transaction.findOneAndUpdate({ _id: transactionId }, { $set: req.body }, { new: true })
             .then(result => {
                 res.status(200).json({
                     message: 'Updated successfully',
-                    ...result
+                    transaction: result
                 })
             })
             .catch(error => catchServerError(res, error))
     },
     removeTransaction(req, res) {
-        let { transactionId } = req.body
-        User.findByIdAndRemove(transactionId)
+        let { transactionId } = req.params
+        Transaction.findOneAndDelete({ _id: transactionId })
             .then(
                 result => {
                     res.status(200).json({
                         message: 'Removed successfully',
-                        ...result
+                        ...result._doc
                     })
                 }
             )

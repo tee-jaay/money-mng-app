@@ -5,11 +5,13 @@ import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Dashboard from '../pages/Dashboard'
+import Navigation from '../components/navigation/Navigation'
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="container py-5">
+      <div className="container">
+        <Navigation />
         <Switch>
           <Route path='/' exact component={Home} />
           <Route path='/login' component={Login} />

@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadTransactions } from '../store/actions/transactionActions'
+import { loadTransactions, removeTransaction } from '../store/actions/transactionActions'
 import CreateTransaction from '../components/transaction/CreateTransaction'
+import UpdateTransaction from '../components/transaction/UpdateTransaction'
 
 class Dashboard extends Component {
 
     state = {
-        createModalOpen: false
+        createModalOpen: false,
+        updateModalOpen: false,
+        id: ''
     }
 
     componentDidMount() {
@@ -22,6 +25,20 @@ class Dashboard extends Component {
     closeCreateModal = () => {
         this.setState({
             createModalOpen: false
+        })
+    }
+
+    openUpdateModal = (id) => {
+        this.setState({
+            updateModalOpen: true,
+            id
+        })
+    }
+
+    closeUpdateModal = () => {
+        this.setState({
+            updateModalOpen: false,
+            id: ''
         })
     }
 
@@ -54,6 +71,22 @@ class Dashboard extends Component {
                                     className="list-group-item">
                                     <p>Type: {transaction.type}</p>
                                     <p>Amount: {transaction.amount}</p>
+                                    {
+                                        this.state.id === transaction._id ?
+                                            <UpdateTransaction
+                                                isOpen={this.state.updateModalOpen}
+                                                close={this.closeUpdateModal}
+                                                transaction={transaction}
+                                            /> : null
+                                    }
+                                    <button
+                                        className='btn btn-danger btn-sm'
+                                        onClick={() => this.props.removeTransaction(transaction._id)}
+                                    >Remove</button>
+                                    <button
+                                        className='btn btn-warning btn-sm ml-1'
+                                        onClick={() => this.openUpdateModal(transaction._id)}
+                                    >Update</button>
                                 </li>
                             ))
                         }
@@ -69,4 +102,4 @@ const mapStateToProps = state => ({
     transactions: state.transactions
 })
 
-export default connect(mapStateToProps, { loadTransactions })(Dashboard)
+export default connect(mapStateToProps, { loadTransactions, removeTransaction })(Dashboard)
