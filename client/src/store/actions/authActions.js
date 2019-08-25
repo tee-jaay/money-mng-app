@@ -4,7 +4,7 @@ import * as Types from './types'
 import setAuthToken from '../../utils/setAuthToken'
 
 export const register = (user, history) => dispatch => {
-    Axios.post('http://localhost:4000/api/users/register', user)
+    Axios.post('/api/users/register', user)
         .then((res) => {
             dispatch({
                 type: Types.USERS_ERROR,
@@ -26,7 +26,7 @@ export const register = (user, history) => dispatch => {
 }
 
 export const login = (user, history) => dispatch => {
-    Axios.post('http://localhost:4000/api/users/login', user)
+    Axios.post('/api/users/login', user)
         .then(res => {
             // save the token to local storage
             let token = res.data.token
